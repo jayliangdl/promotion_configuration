@@ -1,6 +1,6 @@
 
 // 核心逻辑函数
-async function giftsCore(giftDescs) {
+async function giftsCore(giftDescsStr) {
   async function requestApi(apiUrl,method,apikey,params){
     try {
         const requestParam = {
@@ -23,11 +23,14 @@ async function giftsCore(giftDescs) {
         console.error('Error fetching cart items:', error);
     }
 }
-
+// if(!giftDescsStr){
+//   return {}
+// }
 const apiUrl = 'https://api.dify.ai/v1/workflows/run';
 const method = 'POST';
 const apikey = 'app-nu3A4RrG5q5d1I1FrhUuoscV';
 let giftConfigList = [];
+const giftDescs = giftDescsStr.split("||");
 if(giftDescs && giftDescs.length>0){
     for(let i=0;i<giftDescs.length;i++){
         const giftDesc = giftDescs[i];

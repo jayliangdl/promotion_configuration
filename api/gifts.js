@@ -1,9 +1,9 @@
 const {giftsCore} = require('../core/giftsCore');
 
 module.exports = async (req, res) => {
-  const { giftDescs } = req.body;
+  const { giftDescsStr } = req.body;
   try {
-    const result = await giftsCore(giftDescs);
+    const result = await giftsCore(giftDescsStr);
     res.status(200).json(result);
     res.end(); // 关闭连接
   } catch (error) {
