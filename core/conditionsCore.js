@@ -1,6 +1,6 @@
 
 // 核心逻辑函数
-async function conditionsCore(conditions, conditionTypes) {
+async function conditionsCore(conditionsStr, conditionTypesStr) {
   async function requestApi(apiUrl,method,apikey,params){
     try {
         const requestParam = {
@@ -28,6 +28,8 @@ const apiUrl = 'https://api.dify.ai/v1/workflows/run';
 const method = 'POST';
 const apikey = 'app-oP8Yb8ipIK9yEdhvOYtRaAs9';
 let conditionConfigList = [];
+const conditions = conditionsStr.split("||");
+const conditionTypes = conditionTypesStr.split("||");
 if(conditions && conditions.length>0 && conditionTypes && conditionTypes.length==conditions.length){
     for(let i=0;i<conditionTypes.length;i++){
         const conditionType = conditionTypes[i];

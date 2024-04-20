@@ -13,9 +13,9 @@ const {conditionsCore} = require('../core/conditionsCore');
 // };
 
 module.exports = async (req, res) => {
-  const { conditions, conditionTypes } = req.body;
+  const { conditionsStr, conditionTypesStr } = req.body;
   try {
-    const result = await conditionsCore(conditions, conditionTypes);
+    const result = await conditionsCore(conditionsStr, conditionTypesStr);
     res.status(200).json(result);
     res.end(); // 关闭连接
   } catch (error) {
