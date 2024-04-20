@@ -7,6 +7,7 @@ const port = 3000;
 // 导入你的模块
 const chat = require('./api/chat');
 const conditions = require('./api/conditions');
+const gifts = require('./api/gifts');
 const hello = require('./api/hello');
 
 // 使Express能够解析JSON请求体
@@ -16,6 +17,7 @@ app.post('/chat', chat.chat);
 app.post('/explain', chat.explain);
 app.post('/confirmPromotion', chat.confirmPromotion);
 app.post('/conditions', conditions);
+app.post('/gifts', gifts);
 app.post('/hello', hello);
 
 
