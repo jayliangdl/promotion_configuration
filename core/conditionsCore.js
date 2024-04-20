@@ -1,6 +1,6 @@
 
 // 核心逻辑函数
-async function conditionCore(conditions, conditionTypes) {
+async function conditionsCore(conditions, conditionTypes) {
     async function requestApi(apiUrl,method,apikey,params){
       try {
           const requestParam = {
@@ -58,4 +58,4 @@ async function conditionCore(conditions, conditionTypes) {
 }
   
 
-module.exports= {conditionCore};
+module.exports= {conditionsCore};

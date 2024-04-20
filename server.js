@@ -6,7 +6,7 @@ const port = 3000;
 
 // 导入你的模块
 const chat = require('./api/chat');
-const workflow = require('./api/workflow');
+const conditions = require('./api/conditions');
 const hello = require('./api/hello');
 
 // 使Express能够解析JSON请求体
@@ -15,7 +15,7 @@ app.use(express.json());
 app.post('/chat', chat.chat);
 app.post('/explain', chat.explain);
 app.post('/confirmPromotion', chat.confirmPromotion);
-app.post('/wf-conditions', workflow.conditions);
+app.post('/conditions', conditions);
 app.post('/hello', hello);
 
 
