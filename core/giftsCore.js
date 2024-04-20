@@ -49,7 +49,9 @@ if(giftDescs && giftDescs.length>0){
         
     }
 }
-return giftConfigList;
+return {
+  'data':giftConfigList
+  };
 }
   
 

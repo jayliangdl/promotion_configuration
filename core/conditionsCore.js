@@ -54,7 +54,9 @@ if(conditions && conditions.length>0 && conditionTypes && conditionTypes.length=
         
     }
 }
-return conditionConfigList;
+return {
+  'data':conditionConfigList
+  };
 }
   
 
