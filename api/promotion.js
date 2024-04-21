@@ -1,9 +1,9 @@
 const {promotionCore} = require('../core/promotionCore');
 
 module.exports = async (req, res) => {
-  const { conditionDefinitionList, giftDefinitionList, ruleList } = req.body;
+  const { conditionDefinitionListStr, giftDefinitionListStr, ruleListStr } = req.body;
   try {
-    const result = await promotionCore( conditionDefinitionList, giftDefinitionList, ruleList );
+    const result = await promotionCore( conditionDefinitionListStr, giftDefinitionListStr, ruleListStr );
     res.status(200).json(result);
     res.end(); // 关闭连接
   } catch (error) {
