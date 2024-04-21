@@ -9,15 +9,11 @@ const template = `{
 `
 // 核心逻辑函数
 function rulesCore(ruleDefinitionCode, giftsRelationshipStr, 
-  giftDefinitionCodeListStr, conditionDefinitionCodeListStr) {
+  giftDefinitionCodeList, conditionDefinitionCodeList) {
   let result = template;
   result = result.replaceAll("{{ruleDefinitionCode}}",ruleDefinitionCode);
 
   let condition = "";
-  let conditionDefinitionCodeList = [];
-  if(conditionDefinitionCodeListStr){
-    conditionDefinitionCodeList = conditionDefinitionCodeListStr.split("||");
-  }
   if(conditionDefinitionCodeList && conditionDefinitionCodeList.length>0){
     for(let i=0;i<conditionDefinitionCodeList.length;i++){
       condition+=conditionDefinitionCodeList[i];
@@ -26,11 +22,6 @@ function rulesCore(ruleDefinitionCode, giftsRelationshipStr,
       }
     }
     result = result.replaceAll("{{condition}}",condition);
-  }
-
-  let giftDefinitionCodeList = [];
-  if(giftDefinitionCodeListStr){
-    giftDefinitionCodeList = giftDefinitionCodeListStr.split("||");
   }
 
   let consequence = "";
