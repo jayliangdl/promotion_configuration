@@ -8,25 +8,37 @@ const template = `{
 }
 `
 // 核心逻辑函数
-function rulesCore(ruleDefinitionCode, giftsRelationshipStr, giftsDefinitionCodes, conditionDefinitionCodesStr) {
+function rulesCore(ruleDefinitionCode, giftsRelationshipStr, 
+  giftDefinitionCodeList, conditionDefinitionCodeList) {
   let result = template;
   result = result.replaceAll("{{ruleDefinitionCode}}",ruleDefinitionCode);
 
-  let condition = conditionDefinitionCodesStr;
-  if(condition){
-    condition = condition.replaceAll("||","+");
+  let condition = "";
+  if(conditionDefinitionCodeList && conditionDefinitionCodeList.length>0){
+    for(let i=0;i<conditionDefinitionCodeList.length;i++){
+      condition+=conditionDefinitionCodeList[i];
+      if(i+1<conditionDefinitionCodeList.length){
+        condition+="+";
+      }
+    }
     result = result.replaceAll("{{condition}}",condition);
   }
   let consequence = "";
+  let connectCodeBetweenGifts = "";
   if(giftsRelationshipStr=='多款赠品挑选一款'){
-    if(giftsDefinitionCodes && giftsDefinitionCodes.length>0){
-      consequence = giftsDefinitionCodes.replaceAll("||","||");
-    }
+    connectCodeBetweenGifts="||";
   }else if(giftsRelationshipStr=="所有赠品一并赠送"){
-    if(giftsDefinitionCodes && giftsDefinitionCodes.length>0){
-      consequence = giftsDefinitionCodes.replaceAll("||","+");
+    connectCodeBetweenGifts="+";
+  }
+  if(giftDefinitionCodeList && giftDefinitionCodeList.length>0){
+    for(let i=0;i<giftDefinitionCodeList.length;i++){
+      consequence+=giftDefinitionCodeList[i];
+      if(i+1<giftDefinitionCodeList.length){
+        consequence+=connectCodeBetweenGifts;
+      }
     }
   }
+
   result = result.replaceAll("{{consequence}}",consequence);
   let resultJSON = {};
   try{
