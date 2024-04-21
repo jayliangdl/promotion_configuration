@@ -9,6 +9,7 @@ const chat = require('./api/chat');
 const conditions = require('./api/conditions');
 const gifts = require('./api/gifts');
 const rules = require('./api/rules');
+const promotion = require('./api/promotion');
 const hello = require('./api/hello');
 
 // 使Express能够解析JSON请求体
@@ -20,6 +21,7 @@ app.post('/confirmPromotion', chat.confirmPromotion);
 app.post('/conditions', conditions);
 app.post('/gifts', gifts);
 app.post('/rules', rules);
+app.post('/promotion', promotion);
 app.post('/hello', hello);
 
 
