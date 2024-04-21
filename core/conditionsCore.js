@@ -30,11 +30,13 @@ async function conditionsCore(conditionsStr, conditionTypesStr) {
   let conditionConfigList = [];
   const conditions = conditionsStr.split("||");
   const conditionTypes = conditionTypesStr.split("||");
+  let conditionDefinitionCodeList = [];
   if(conditions && conditions.length>0 && conditionTypes && conditionTypes.length==conditions.length){
       for(let i=0;i<conditionTypes.length;i++){
           const conditionType = conditionTypes[i];
           const condition = conditions[i];
           const conditionDefinitionCode = `C${i+1}`;
+          conditionDefinitionCodeList.push(conditionDefinitionCode);
           const params = 
           {
             "inputs": {
@@ -59,7 +61,8 @@ async function conditionsCore(conditionsStr, conditionTypesStr) {
       }
   }
   return {
-      "conditionDefinitionList":conditionConfigList
+      "conditionDefinitionList":conditionConfigList,
+      "conditionDefinitionCodeList":conditionDefinitionCodeList
     }
 }
 
