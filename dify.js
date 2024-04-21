@@ -1,4 +1,4 @@
-function main({ eng1_response }) {
+function main({ conditionsFromVercel }) {
 
   function fixJsonString(jsonString) {
     let inQuotes = false;  // 用来跟踪是否在引号内
@@ -28,26 +28,22 @@ function main({ eng1_response }) {
   
     return result;
   }
-  const fixed_json_string = fixJsonString(eng1_response);
-    // console.log(fixed_json_string);  // 输出转换后的字符串以检查
-    const conditions = JSON.parse(fixed_json_string);
-    let conditionsStr = "";
-    if('conditions' in conditions){
-      for(let i=0;i<conditions['conditions'].length;i++){
-        const condition = conditions['conditions'][i];
-        console.log(`condition:${JSON.stringify(condition)}`);
-        conditionsStr+=condition;
-        if(i+1<conditions['conditions'].length){
-          conditionsStr+="||";
-        }
-      }
+  const conditionsFromVercelStr = fixJsonString(conditionsFromVercel);
+    const conditionsFromVercelJSON = JSON.parse(conditionsFromVercelStr);
+    if('data' in conditionsFromVercelJSON){
+      conditionsFromVercelJSON['data']
     }
     return {
-        eng1_response: conditions,
-        conditionsStr: conditionsStr
+        conditions: object
     }
 }
 
-const eng1_response = "{\n  \"condition_count\": 2,\n  \"condition_relationship\": \"or\",\n  \"conditions\": [\n    \"购买鲜花系列（编号7001-7010）任意3束\",\n    \"购买蛋糕系列（编号8001-8005）满200元\"\n  ]\n}";
-const result = main({eng1_response});
-console.log(JSON.stringify(result));  
+const input = 
+{
+  "conditionsFromVercel": "{\"data\":[{\"result\":{\"bvFlag\":false,\"code\":\"C1\",\"desc\":\"\",\"exceedFlag\":true,\"exceptItems\":[],\"itemClass1s\":[],\"itemClass2s\":[],\"itemClass3s\":[],\"itemClass4s\":[],\"itemClass5s\":[],\"itemClass6s\":[],\"itemClass7s\":[],\"itemClass8s\":[],\"itemClass9s\":[],\"items\":[{\"code\":\"3001\",\"quantity\":2}],\"levelInfo\":{\"flag\":false,\"itemCatalogQuantity\":0,\"levelQuantity\":0},\"quantity\":2}}]}"
+}
+const result = main(input);
+console.log(JSON.stringify(result));
+for(let key in result){
+  console.log(typeof(result[key]));
+}  
