@@ -1,9 +1,9 @@
 const {rulesCore} = require('../core/rulesCore');
 
 module.exports = async (req, res) => {
-  const { ruleDefinitionCode, giftsRelationshipStr, giftDefinitionCodeList, conditionDefinitionCodeList } = req.body;
+  const { ruleDefinitionCode, giftsRelationshipStr, giftDefinitionCodeStr, conditionDefinitionCodeStr } = req.body;
   try {
-    const result = await rulesCore( ruleDefinitionCode, giftsRelationshipStr, giftDefinitionCodeList, conditionDefinitionCodeList );
+    const result = await rulesCore( ruleDefinitionCode, giftsRelationshipStr, giftDefinitionCodeStr, conditionDefinitionCodeStr );
     res.status(200).json(result);
     res.end(); // 关闭连接
   } catch (error) {

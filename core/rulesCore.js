@@ -9,11 +9,15 @@ const template = `{
 `
 // 核心逻辑函数
 function rulesCore(ruleDefinitionCode, giftsRelationshipStr, 
-  giftDefinitionCodeList, conditionDefinitionCodeList) {
+  giftDefinitionCodeListStr, conditionDefinitionCodeListStr) {
   let result = template;
   result = result.replaceAll("{{ruleDefinitionCode}}",ruleDefinitionCode);
 
   let condition = "";
+  let conditionDefinitionCodeList = [];
+  if(conditionDefinitionCodeListStr){
+    conditionDefinitionCodeList = conditionDefinitionCodeListStr.split("||");
+  }
   if(conditionDefinitionCodeList && conditionDefinitionCodeList.length>0){
     for(let i=0;i<conditionDefinitionCodeList.length;i++){
       condition+=conditionDefinitionCodeList[i];
@@ -23,6 +27,12 @@ function rulesCore(ruleDefinitionCode, giftsRelationshipStr,
     }
     result = result.replaceAll("{{condition}}",condition);
   }
+
+  let giftDefinitionCodeList = [];
+  if(giftDefinitionCodeListStr){
+    giftDefinitionCodeList = giftDefinitionCodeListStr.split("||");
+  }
+
   let consequence = "";
   let connectCodeBetweenGifts = "";
   if(giftsRelationshipStr=='多款赠品挑选一款'){
