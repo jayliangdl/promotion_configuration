@@ -30,7 +30,7 @@ function rulesCore(ruleDefinitionCode, giftsRelationshipStr, giftsDefinitionCode
   result = result.replaceAll("{{consequence}}",consequence);
   let resultJSON = {};
   try{
-    console.log(`result:${result}`);
+    // console.log(`result:${result}`);
     resultJSON = JSON.parse(result);
   }catch(err){
     console.error(err);
