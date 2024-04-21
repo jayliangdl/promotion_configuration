@@ -57,9 +57,7 @@ function rulesCore(ruleDefinitionCode, giftsRelationshipStr,
   }catch(err){
     console.error(err);
   }
-  return {
-      "result":resultJSON
-  }
+  return resultJSON;
 }
 
 module.exports= {rulesCore};
