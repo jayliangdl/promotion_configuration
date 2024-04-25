@@ -1,5 +1,12 @@
-function main({ conditionsFromVercel }) {
-
+function main({ eng1_response }) {
+  function replaceJSONHeader(str){
+    let ret = str
+    if(str){
+      ret = str.replace('```json','');
+      ret = ret.replace('```','');
+    }
+    return ret;
+  }
   function fixJsonString(jsonString) {
     let inQuotes = false;  // 用来跟踪是否在引号内
     let result = '';
@@ -28,40 +35,19 @@ function main({ conditionsFromVercel }) {
   
     return result;
   }
-  const conditionsFromVercelStr = fixJsonString(conditionsFromVercel);
-
-  let conditionDefinitionCodeStr = '';
-    // console.log(fixed_json_string);  // 输出转换后的字符串以检查
-    const conditionsFromVercelJSON = JSON.parse(conditionsFromVercelStr);
-    let conditionDefinitionList = [];
-    let conditionDefinitionCodeList = []
-    if('conditionDefinitionList' in conditionsFromVercelJSON){
-      conditionDefinitionList = conditionsFromVercelJSON['conditionDefinitionList'];
-    }
-    if('conditionDefinitionCodeList' in conditionsFromVercelJSON){
-      conditionDefinitionCodeList = conditionsFromVercelJSON['conditionDefinitionCodeList'];
-
-      
-      if(conditionDefinitionCodeList && conditionDefinitionCodeList.length>0){
-        for(let i=0;i< conditionDefinitionCodeList.length;i++){
-          const conditionDefinitionCode = conditionDefinitionCodeList[i];
-          conditionDefinitionCodeStr+=conditionDefinitionCode;
-          if(i+1<conditionDefinitionCodeList.length){
-            conditionDefinitionCodeStr+="||";
-          }
-        }
-      }
-    }
+  let fixed_json_string = eng1_response;
+  fixed_json_string = replaceJSONHeader(fixed_json_string);
+  fixed_json_string = fixJsonString(fixed_json_string);
+    console.log(fixed_json_string);  // 输出转换后的字符串以检查
+    const object = JSON.parse(fixed_json_string);
     return {
-      conditionDefinitionList: conditionDefinitionList,
-      conditionDefinitionCodeList:conditionDefinitionCodeList,
-      conditionDefinitionCodeStr:conditionDefinitionCodeStr
+        eng1_response: object
     }
 }
 
 const input = 
 {
-  "text": "{\n\"code\":{\n    \"bvFlag\": false,\n    \"code\": \"C1\",\n    \"desc\": \"\",\n    \"dp\": \"1500\",\n    \"exceedFlag\": true,\n    \"exceptItems\": [],\n    \"itemClass1s\": [],\n    \"itemClass2s\": [],\n    \"itemClass3s\": [],\n    \"itemClass4s\": [],\n    \"itemClass5s\": [],\n    \"itemClass6s\": [],\n    \"itemClass7s\": [],\n    \"itemClass8s\": [],\n    \"itemClass9s\": [],\n    \"items\": [\n      {\n        \"code\": \"86456\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86457\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86458\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86459\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"87243\",\n        \"quantity\": 0\n      }\n    ],\n    \"levelInfo\": {\n      \"flag\": false,\n      \"itemCatalogQuantity\": 0,\n      \"levelQuantity\": 0\n    },\n    \"quantity\": 0\n  },\n\"business\": {\n\t\t\"type\": \"系列商品金额满N元\",\n\t\t\"products\": [\n\t\t\t\"86456\",\n\t\t\t\"86457\", \n\t\t\t\"86458\",\n\t\t\t\"86459\",\n\t\t\t\"87243\"\n\t\t],\n\t\t\"amount\": \"1500\",\n\t}\n}",
+  "text": "```json\n{\n  \"code\": {\n    \"bvFlag\": false,\n    \"code\": \"C1\",\n    \"desc\": \"\",\n    \"dp\": \"1500\",\n    \"exceedFlag\": true,\n    \"exceptItems\": [],\n    \"itemClass1s\": [],\n    \"itemClass2s\": [],\n    \"itemClass3s\": [],\n    \"itemClass4s\": [],\n    \"itemClass5s\": [],\n    \"itemClass6s\": [],\n    \"itemClass7s\": [],\n    \"itemClass8s\": [],\n    \"itemClass9s\": [],\n    \"items\": [\n      {\n        \"code\": \"86456\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86457\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86458\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86459\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"87243\",\n        \"quantity\": 0\n      }\n    ],\n    \"levelInfo\": {\n      \"flag\": false,\n      \"itemCatalogQuantity\": 0,\n      \"levelQuantity\": 0\n    },\n    \"quantity\": 0\n  },\n  \"business\": {\n    \"type\": \"系列商品金额满N元\",\n    \"products\": [\n      \"86456\",\n      \"86457\",\n      \"86458\",\n      \"86459\",\n      \"87243\"\n    ],\n    \"amount\": \"1500\"\n  }\n}\n```",
   "usage": {
     "prompt_tokens": 1071,
     "prompt_unit_price": "0",

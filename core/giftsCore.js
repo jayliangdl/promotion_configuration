@@ -47,12 +47,12 @@ if(giftDescs && giftDescs.length>0){
           "user": "abc-123"
         }
         const data = await requestApi(apiUrl,method,apikey,params);
-        console.log(`data:${JSON.stringify(data)}`);
+        // console.log(`data:${JSON.stringify(data)}`);
         if(data && 'data' in data && data['data'] 
         && 'outputs' in data['data'] && data['data']['outputs']
         && 'giftConfiguration' in data['data']['outputs'] && data['data']['outputs']['giftConfiguration']){
           giftConfigList.push(data['data']['outputs']['giftConfiguration']);
-          console.log(`data:${JSON.stringify(data['data']['outputs'])}`);
+          // console.log(`data:${JSON.stringify(data['data']['outputs'])}`);
         }
         
     }

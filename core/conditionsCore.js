@@ -51,7 +51,7 @@ async function conditionsCore(conditionsStr, conditionTypesStr) {
           // console.log(`params:${JSON.stringify(params)}`);
 
           const data = await requestApi(apiUrl,method,apikey,params);
-          console.log(`data:${JSON.stringify(data)}`);
+          // console.log(`data:${JSON.stringify(data)}`);
           if(data && 'data' in data && data['data'] 
           && 'outputs' in data['data'] && data['data']['outputs']
           && 'result' in data['data']['outputs'] && data['data']['outputs']['result']){
