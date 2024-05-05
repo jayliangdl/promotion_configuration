@@ -31,7 +31,7 @@ app.get('/get-gifts', get_gifts);
 app.post('/rules', rules);
 app.post('/promotion', promotion);
 app.post('/hello', hello);
-app.get('/get-hello', get_hello);
+app.get('/gethello', get_hello);
 
 
 
