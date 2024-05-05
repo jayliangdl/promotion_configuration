@@ -4,12 +4,16 @@
     {
       "src": "/api/get_hello.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "/api/hello.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/gethello",
-      "dest": "/api/get_hello.js"
+      "src": "/api/hello",
+      "dest": "/api/hello.js"
     }
   ]
 }
