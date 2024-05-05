@@ -30,7 +30,29 @@ const mysql = require('mysql2');
 // }
 
 
-const sendPostRequest = function(hostname, path, headers, data) {
+const sendPostRequest = async function(hostname, path, headers, body) {
+  // 发送消息到后端
+  try {
+    // console.log(`url:`+`https://${hostname}${path}`);
+    const response = await fetch(`https://${hostname}${path}`, {
+      method: "POST",
+      headers: headers,
+      body: body
+    });
+    // console.log('body:'+JSON.stringify(body));
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+   
+    return data;
+    
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+  }
+
+
   return new Promise((resolve, reject) => {
     const options = {
       hostname: hostname,
@@ -40,12 +62,13 @@ const sendPostRequest = function(hostname, path, headers, data) {
     };
 
     const chunks = [];
+    
     const req = https.request(options, res => {
       res.on('data', chunk => chunks.push(chunk)); // 收集数据片段
       res.on('end', () => {
         const body = Buffer.concat(chunks).toString(); // 合并所有数据片段
         try {
-          console.log(`body:${body}`);
+          // console.log(`body:${body}`);
           const response = JSON.parse(body);
           if (res.statusCode === 200) {
             resolve(response);

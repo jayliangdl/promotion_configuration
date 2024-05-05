@@ -1,55 +1,124 @@
 const utils = require('./utils');
 const constanst = require('./constanst');
+const { v4: uuidv4 } = require('uuid');
 
-const DIFY_TOKEN = 'app-Egk9uUV3iPiy5MikuEoADwNy';
+// const DIFY_TOKEN = 'app-Egk9uUV3iPiy5MikuEoADwNy';
+const DIFY_TOKEN =  'app-p54opRprkx4gCpbiq4bJ44Mb';//正式的
+// const DIFY_TOKEN = 'app-yqw3LwThEFzrTq9eTT3G21q4';//调试的
 
 // 核心逻辑函数
-async function chatCore(humanMessage, sessionId, userId,sendEventStreamData) {
-  const data = JSON.stringify({
+// 核心逻辑函数
+async function chatCore(humanMessage, {step,conditionsStr,conditionTypesStr,giftDescsStr,giftsRelationshipStr,promotionBaseInfoStr}, sessionId, userId) {
+  const body = JSON.stringify({
     "inputs": {
-      "str1":humanMessage
+      // "str1":humanMessage
+      "promotion_requirement":humanMessage,
+      "step":step,
+      "conditionsStr":conditionsStr?conditionsStr:"",
+      "conditionTypesStr":conditionTypesStr?conditionTypesStr:"",
+      "giftDescsStr":giftDescsStr?giftDescsStr:"",
+      "giftsRelationshipStr":giftsRelationshipStr?giftsRelationshipStr:"",
+      "promotionBaseInfoStr":promotionBaseInfoStr?promotionBaseInfoStr:"",
     },
-    "response_mode": "streaming",
+    // "response_mode": "streaming",
+    "response_mode": "blocking",
     "user": userId
   });
+  
   const headers = {
     'Authorization': `Bearer ${DIFY_TOKEN}`,
     'User-Agent': 'Node.js',
     'Content-Type': 'application/json',
-    'Content-Length': Buffer.byteLength(data)
+    'Content-Length': Buffer.byteLength(body)
   }
   const hostname='api.dify.ai';
   const path='/v1/workflows/run';
 
   const status = '1';
-  const promotionConfiguration = JSON.stringify({'test':'test'});
-  const response = await utils.sendPostRequestStreaming(hostname, path, headers, data, sendEventStreamData); // 传递 sendEventStreamData 至 utils.sendPostRequest
-  // const response = await utils.sendPostRequest(hostname,path,headers,data);
-  console.log(`response:${response}`);
-  // const sql = `INSERT INTO promotion_solution (
-  //   session_id,
-  //   user_id,
-  //   promotion_configuration,
-  //   status
-  // ) VALUES (
-  //   '${sessionId}',
-  //   '${userId}',
-  //   '${promotionConfiguration}',
-  //   '${status}'
-  // );`;
-    // 插入数据的示例
-  // const dataToInsert = {
-  //   sessionId: sessionId,
-  //   userId: userId,
-  //   promotionConfiguration: promotionConfiguration,
-  //   created_at: new Date()
-  // };
+  // console.log(`\n\nrequest:${body}`)
+  const response = await utils.sendPostRequest(hostname, path, headers, body); // 传递 sendEventStreamData 至 utils.sendPostRequest
+  console.log(`body:${body}`);
+  console.log("\n");
+  console.log(`response:${JSON.stringify(response)}`);
 
-  // const parameters = [dataToInsert.sessionId, dataToInsert.userId, dataToInsert.promotionConfiguration];
-  // utils.runSQL(constanst.mySQLConnectionConfig,sql,parameters);
+  console.log("\n");
+  console.log("\n");
+  if('data' in response && 'outputs' in response['data'] 
+    && 'result' in response['data']['outputs'] 
+    && 'responseBy' in response['data']['outputs']['result'] 
+    && response['data']['outputs']['result']['responseBy']==='SA-促销配置编写'){
+    if('promotion' in response['data']['outputs']['result']){
+      const promotion = response['data']['outputs']['result']['promotion'];
+      const promotionConfiguration = JSON.stringify(promotion);
+      const uniqueId = uuidv4();
+      const sql = `INSERT INTO promotion_solution (id,session_id,user_id,promotion_configuration,status) 
+      VALUES ('${uniqueId}','${sessionId}','${userId}','${promotionConfiguration}','${status}');`;
+      // 插入数据的示例
+      const dataToInsert = {
+        uniqueId: uniqueId,
+        sessionId: sessionId,
+        userId: userId,
+        promotionConfiguration: promotionConfiguration,
+        created_at: new Date()
+      };
+      response['data']['outputs']['result']['solutionId'] = uniqueId;
+      const parameters = [dataToInsert.uniqueId, dataToInsert.sessionId, dataToInsert.userId, dataToInsert.promotionConfiguration];
+      utils.runSQL(constanst.mySQLConnectionConfig,sql,parameters);
+    }
+  }
   const result = response;
   return result;
 }
+
+// async function chatCore(humanMessage, sessionId, userId,sendEventStreamData) {
+//   const data = JSON.stringify({
+//     "inputs": {
+//       // "str1":humanMessage
+//       "promotion_requirement":humanMessage,
+//       "step":"检查信息完整性"
+//     },
+//     // "response_mode": "streaming",
+//     "response_mode": "blocking",
+//     "user": userId
+//   });
+//   const headers = {
+//     'Authorization': `Bearer ${DIFY_TOKEN}`,
+//     'User-Agent': 'Node.js',
+//     'Content-Type': 'application/json',
+//     'Content-Length': Buffer.byteLength(data)
+//   }
+//   const hostname='api.dify.ai';
+//   const path='/v1/workflows/run';
+
+  // const status = '1';
+  // const promotionConfiguration = JSON.stringify({'test':'test'});
+  // const response = await utils.sendPostRequestStreaming(hostname, path, headers, data, sendEventStreamData); // 传递 sendEventStreamData 至 utils.sendPostRequest
+  // // const response = await utils.sendPostRequest(hostname,path,headers,data);
+  // console.log(`response:${response}`);
+  // // const sql = `INSERT INTO promotion_solution (
+  // //   session_id,
+  // //   user_id,
+  // //   promotion_configuration,
+  // //   status
+  // // ) VALUES (
+  // //   '${sessionId}',
+  // //   '${userId}',
+  // //   '${promotionConfiguration}',
+  // //   '${status}'
+  // // );`;
+  //   // 插入数据的示例
+  // // const dataToInsert = {
+  // //   sessionId: sessionId,
+  // //   userId: userId,
+  // //   promotionConfiguration: promotionConfiguration,
+  // //   created_at: new Date()
+  // // };
+
+  // // const parameters = [dataToInsert.sessionId, dataToInsert.userId, dataToInsert.promotionConfiguration];
+  // // utils.runSQL(constanst.mySQLConnectionConfig,sql,parameters);
+  // const result = response;
+  // return result;
+// }
 
 /**
  * 解释促销配置，将原来JSON配置解释成文本。
@@ -65,7 +134,6 @@ function explainCore(config) {
   const conditionRelationship = config['detail']['conditionRelationship'];
   const conditions = config['detail']['conditions'];
   let conditionRelationshipStr = ''
-  console.log(`conditions.length:${conditions.length}`);
   if(conditions.length==1){
     conditionRelationshipStr = '满足以下促销条件';
   }else{
@@ -120,4 +188,21 @@ async function confirmPromotionCore(solutionId, sessionId, userId) {
   };
   return result;
 }
-module.exports= {chatCore,explainCore,confirmPromotionCore};
+
+async function cancelPromotionCore(solutionId, sessionId, userId) {
+  const status = '0';
+  const sql = `update promotion_solution set status='${status}' where id='${solutionId}' and session_id='${sessionId}' and user_id='${userId}';`;
+  const dataToUpdate = {
+    sessionId: sessionId,
+    userId: userId,
+    status: status,
+    solutionId: solutionId
+  };
+  const parameters = [dataToUpdate.status, dataToUpdate.solutionId, dataToUpdate.sessionId,dataToUpdate.userId];
+  utils.runSQL(constanst.mySQLConnectionConfig,sql,parameters);
+  const result = {
+    'result':'success'
+  };
+  return result;
+}
+module.exports= {chatCore,explainCore,confirmPromotionCore,cancelPromotionCore};

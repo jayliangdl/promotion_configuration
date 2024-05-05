@@ -1,4 +1,5 @@
-function main({ eng1_response }) {
+function main({ text }) {
+
   function replaceJSONHeader(str){
     let ret = str
     if(str){
@@ -7,13 +8,13 @@ function main({ eng1_response }) {
     }
     return ret;
   }
+  
   function fixJsonString(jsonString) {
     let inQuotes = false;  // 用来跟踪是否在引号内
     let result = '';
   
     for (let i = 0; i < jsonString.length; i++) {
       const char = jsonString[i];
-      const nextChar = jsonString[i + 1];
   
       if (char === '"' && (i === 0 || jsonString[i - 1] !== '\\')) {
         // 遇到非转义的双引号，切换状态
@@ -35,155 +36,40 @@ function main({ eng1_response }) {
   
     return result;
   }
-  let fixed_json_string = eng1_response;
-  fixed_json_string = replaceJSONHeader(fixed_json_string);
-  fixed_json_string = fixJsonString(fixed_json_string);
-    console.log(fixed_json_string);  // 输出转换后的字符串以检查
-    const object = JSON.parse(fixed_json_string);
-    return {
-        eng1_response: object
-    }
-}
-
-const input = 
-{
-  "text": "```json\n{\n  \"code\": {\n    \"bvFlag\": false,\n    \"code\": \"C1\",\n    \"desc\": \"\",\n    \"dp\": \"1500\",\n    \"exceedFlag\": true,\n    \"exceptItems\": [],\n    \"itemClass1s\": [],\n    \"itemClass2s\": [],\n    \"itemClass3s\": [],\n    \"itemClass4s\": [],\n    \"itemClass5s\": [],\n    \"itemClass6s\": [],\n    \"itemClass7s\": [],\n    \"itemClass8s\": [],\n    \"itemClass9s\": [],\n    \"items\": [\n      {\n        \"code\": \"86456\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86457\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86458\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"86459\",\n        \"quantity\": 0\n      },\n      {\n        \"code\": \"87243\",\n        \"quantity\": 0\n      }\n    ],\n    \"levelInfo\": {\n      \"flag\": false,\n      \"itemCatalogQuantity\": 0,\n      \"levelQuantity\": 0\n    },\n    \"quantity\": 0\n  },\n  \"business\": {\n    \"type\": \"系列商品金额满N元\",\n    \"products\": [\n      \"86456\",\n      \"86457\",\n      \"86458\",\n      \"86459\",\n      \"87243\"\n    ],\n    \"amount\": \"1500\"\n  }\n}\n```",
-  "usage": {
-    "prompt_tokens": 1071,
-    "prompt_unit_price": "0",
-    "prompt_price_unit": "0",
-    "prompt_price": "0.0000000",
-    "completion_tokens": 561,
-    "completion_unit_price": "0",
-    "completion_price_unit": "0",
-    "completion_price": "0.0000000",
-    "total_tokens": 1632,
-    "total_price": "0.0000000",
-    "currency": "USD",
-    "latency": 5.65804136171937
+  let str = replaceJSONHeader(text);
+  str = fixJsonString(str);
+  const result = JSON.parse(str);
+  result['responseBy'] = '需求分析工程师1(检查信息完整性)';
+  return {
+    result: result
   }
 }
-let param = {};
-param['eng1_response'] = input["text"];
-const result = main(param);
-console.log(JSON.stringify(result));
-for(let key in result){
-  console.log(typeof(result[key]));
+
+const result = 
+{
+  "text": "{\"answer\": \"{\"validateResult\": \"success\", \"error\": \"\", \"nextStep\": \"理解促销基本信息\"}\"}"
+}
+// {
+//   "result": {
+//     "result": "fail",
+//     "promotionName": "享受包礼品买赠活动",
+//     "startDate": "",
+//     "endDate": "2099-12-31 23:59:59",
+//     "error": "缺少活动开始日期时间。",
+//     "nextStep": "理解促销条件",
+//     "responseBy": "需求分析工程师2(理解促销基本信息)"
+//   }
+// }
+// let param = {};
+// param['eng1_response'] = input["text"];
+
+const result1 = main(result);
+console.log(JSON.stringify(result1));
+for(let key in result1){
+  console.log(typeof(result1[key]));
 }
 
-// const json = 
-// {
-//   "conditionDefinitionList": [
-//     {
-//       "bvFlag": false,
-//       "code": "C1",
-//       "desc": "",
-//       "exceedFlag": true,
-//       "exceptItems": [],
-//       "itemClass1s": [],
-//       "itemClass2s": [],
-//       "itemClass3s": [],
-//       "itemClass4s": [],
-//       "itemClass5s": [],
-//       "itemClass6s": [],
-//       "itemClass7s": [],
-//       "itemClass8s": [],
-//       "itemClass9s": [],
-//       "items": [
-//         {
-//           "code": "7001",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7002",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7003",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7004",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7005",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7006",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7007",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7008",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7009",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "7010",
-//           "quantity": 0
-//         }
-//       ],
-//       "levelInfo": {
-//         "flag": false,
-//         "itemCatalogQuantity": 0,
-//         "levelQuantity": 0
-//       },
-//       "quantity": 3
-//     },
-//     {
-//       "bvFlag": false,
-//       "code": "C2",
-//       "desc": "",
-//       "exceedFlag": true,
-//       "exceptItems": [],
-//       "itemClass1s": [],
-//       "itemClass2s": [],
-//       "itemClass3s": [],
-//       "itemClass4s": [],
-//       "itemClass5s": [],
-//       "itemClass6s": [],
-//       "itemClass7s": [],
-//       "itemClass8s": [],
-//       "itemClass9s": [],
-//       "items": [
-//         {
-//           "code": "8001",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "8002",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "8003",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "8004",
-//           "quantity": 0
-//         },
-//         {
-//           "code": "8005",
-//           "quantity": 0
-//         }
-//       ],
-//       "levelInfo": {
-//         "flag": false,
-//         "itemCatalogQuantity": 0,
-//         "levelQuantity": 0
-//       },
-//       "quantity": 200
-//     }
-//   ]
-// }
-// let str = JSON.stringify(json);
-// str = str.replaceAll("\"","\\\"");
-// console.log(str);
+
+const { v4: uuidv4 } = require('uuid');
+const uniqueId = uuidv4();
+console.log(uniqueId); // 输出类似 1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed

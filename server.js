@@ -7,7 +7,9 @@ const port = 3000;
 // 导入你的模块
 const chat = require('./api/chat');
 const conditions = require('./api/conditions');
+const get_conditions = require('./api/get_conditions');
 const gifts = require('./api/gifts');
+const get_gifts = require('./api/get_gifts');
 const rules = require('./api/rules');
 const promotion = require('./api/promotion');
 const hello = require('./api/hello');
@@ -18,8 +20,13 @@ app.use(express.json());
 app.post('/chat', chat.chat);
 app.post('/explain', chat.explain);
 app.post('/confirmPromotion', chat.confirmPromotion);
+app.post('/cancelPromotion', chat.cancelPromotion);
 app.post('/conditions', conditions);
 app.post('/gifts', gifts);
+
+app.get('/get-conditions', get_conditions);
+app.get('/get-gifts', get_gifts);
+
 app.post('/rules', rules);
 app.post('/promotion', promotion);
 app.post('/hello', hello);

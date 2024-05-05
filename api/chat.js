@@ -1,4 +1,5 @@
-const {chatCore,explainCore,confirmPromotionCore} = require('../core/chatCore');
+const {chatCore,explainCore,confirmPromotionCore,cancelPromotionCore} = require('../core/chatCore');
+const { v4: uuidv4 } = require('uuid');
 const config_demo = {
   'promotionName':'xxx',
   'startDate':'2024-04-15 10:00:00',
@@ -44,27 +45,48 @@ const config_demo = {
 //   }
 // };
 
+/*以下版本适用于AI逐字吐出的情况*/
+// const chat = async (req, res) => {
+//   const { humanMessage, sessionId, userId } = req.body;
+
+//   // 设置头部，告诉客户端这是一个事件流
+//   res.writeHead(200, {
+//     'Content-Type': 'text/event-stream',
+//     'Cache-Control': 'no-cache',
+//     'Connection': 'keep-alive',
+//   });
+
+//   const sendEventStreamData = (data) => {
+//     res.write(`${data}||`);
+//   }
+
+//   try {
+//     await chatCore(humanMessage, sessionId, userId, sendEventStreamData);
+//     res.end(); // 关闭连接
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// };
+
 const chat = async (req, res) => {
-  const { humanMessage, sessionId, userId } = req.body;
-
-  // 设置头部，告诉客户端这是一个事件流
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-  });
-
-  const sendEventStreamData = (data) => {
-    res.write(`${data}||`);
-  }
-
+  const { humanMessage, step,conditionsStr,conditionTypesStr,giftDescsStr,giftsRelationshipStr, promotionBaseInfoStr, userId } = req.body;
+  let { sessionId } = req.body;
   try {
-    await chatCore(humanMessage, sessionId, userId, sendEventStreamData);
-    res.end(); // 关闭连接
+    if(!sessionId){
+      sessionId = uuidv4();
+    } 
+    const result = await chatCore(humanMessage, {step,conditionsStr,conditionTypesStr,giftDescsStr,giftsRelationshipStr,promotionBaseInfoStr}, sessionId, userId);
+    if('data' in result && 'outputs' in result['data'] && result['data']['outputs']){
+      const outputs = result['data']['outputs'];
+      outputs['sessionId'] = sessionId;
+      res.status(200).json(outputs);
+    }
   } catch (error) {
+    console.log(`error:${error}`);
     res.status(500).send(error.message);
   }
 };
+
 
 const explain = async(req, res) =>{
   try {
@@ -84,4 +106,14 @@ const confirmPromotion = async(req, res) =>{
     res.status(500).send(error.message);
   }
 }
-module.exports = {chat,explain,confirmPromotion};
+
+const cancelPromotion = async(req, res) =>{
+  try {
+    const { solutionId, sessionId, userId } = req.body;
+    const result = await cancelPromotionCore(solutionId, sessionId, userId);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
+module.exports = {chat,explain,confirmPromotion,cancelPromotion};
