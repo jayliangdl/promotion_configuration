@@ -13,6 +13,7 @@ const get_gifts = require('./api/get_gifts');
 const rules = require('./api/rules');
 const promotion = require('./api/promotion');
 const hello = require('./api/hello');
+const get_hello = require('./api/get_hello');
 
 // 使Express能够解析JSON请求体
 app.use(express.json());
@@ -30,6 +31,7 @@ app.get('/get-gifts', get_gifts);
 app.post('/rules', rules);
 app.post('/promotion', promotion);
 app.post('/hello', hello);
+app.get('/get-hello', get_hello);
 
 
 
