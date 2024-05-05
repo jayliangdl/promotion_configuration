@@ -8,12 +8,54 @@
     {
       "src": "/api/hello.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "/api/conditions.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "/api/gifts.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "/api/get_gifts.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "/api/get_conditions.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
+      "src": "/api/gethello",
+      "methods": ["GET"], 
+      "dest": "/api/get_hello.js"
+    },
+    {
       "src": "/api/hello",
+      "methods": ["POST"], 
       "dest": "/api/hello.js"
+    },
+    {
+      "src": "/api/conditions",
+      "methods": ["POST"],
+      "dest": "/api/conditions.js"
+    },
+    {
+      "src": "/api/gifts",
+      "methods": ["POST"],
+      "dest": "/api/gifts.js"
+    },
+    {
+      "src": "/api/getgifts",
+      "methods": ["GET"], 
+      "dest": "/api/get_gifts.js"
+    },
+    {
+      "src": "/api/getconditions",
+      "methods": ["GET"], 
+      "dest": "/api/get_conditions.js"
     }
   ]
 }

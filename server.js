@@ -25,8 +25,8 @@ app.post('/cancelPromotion', chat.cancelPromotion);
 app.post('/conditions', conditions);
 app.post('/gifts', gifts);
 
-app.get('/get-conditions', get_conditions);
-app.get('/get-gifts', get_gifts);
+app.get('/getconditions', get_conditions);
+app.get('/getgifts', get_gifts);
 
 app.post('/rules', rules);
 app.post('/promotion', promotion);
